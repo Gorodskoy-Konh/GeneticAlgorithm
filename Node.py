@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import random
 import copy
-from Assignee import Assigner
+from Assignee import Assignee
 
 ORDER_LIMIT = 100000
 

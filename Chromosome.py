@@ -6,8 +6,12 @@ from Assignee import Assignee
 class Chromosome:
     def __init__(self, deadlines: list[datetime], durations: list[timedelta], children: list[int], parents: list[int]) -> None:
         self.nodes = []
+        self.deadlines = deadlines
+        self.durations = durations
+        self.children = children
+        self.parents = parents
         for i in range(len(deadlines)):
-            self.nodes.append(Node(deadlines[i], durations[i]))
+            self.nodes.append(Node(deadlines[i], durations[i], i))
         for i in range(len(deadlines)):
             if children[i] is not None:
                 self.nodes[i].child = self.nodes[children[i]]
