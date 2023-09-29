@@ -40,6 +40,7 @@ class Chromosome:
             
             full_duration += min_time
         
+        self.fitness_score = full_duration
         return full_duration
 
 
