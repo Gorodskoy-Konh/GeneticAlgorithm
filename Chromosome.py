@@ -6,7 +6,12 @@ class Chromosome:
     def __init__(self, deadlines: list[datetime], durations: list[timedelta], children: list[int], parents: list[int]) -> None:
         self.nodes = []
         for i in range(len(deadlines)):
-            self.nodes.append(Node(deadlines[i], durations[i], child=children[i], parent=parents[i]))
+            self.nodes.append(Node(deadlines[i], durations[i]))
+        for i in range(len(deadlines)):
+            if children[i] is not None:
+                self.nodes[i].child = self.nodes[children[i]]
+            if parents[i] is not None:
+                self.nodes[i].parent = self.nodes[parents[i]]
     
     def fitness(self):
         pass
