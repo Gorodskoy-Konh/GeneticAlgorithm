@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 from Node import Node, ORDER_LIMIT
 import random
+from Assignee import Assignee
 
 class Chromosome:
     def __init__(self, deadlines: list[datetime], durations: list[timedelta], children: list[int], parents: list[int]) -> None:
@@ -13,8 +14,44 @@ class Chromosome:
             if parents[i] is not None:
                 self.nodes[i].parent = self.nodes[parents[i]]
     
-    def fitness(self):
-        pass
+    def fitness(self, assignees: list[Assignee]):
+        full_duration = 0
+        
+        self.nodes.sort(key=lambda x: x.order)
+        isopen = [False]*len(self.nodes)
+        assignments = {assignee.id:[] for assignee in assignees}
+
+        for node in self.nodes:
+            assignments[node.assignee].append(node)
+            if node.child is None:
+                isopen[node.id] == True
+        
+
+        while len(assignments) > 0:
+            min_assignee = -1
+            min_time = 1e10
+            for assignee in assignments:
+                task = assignments[assignee][0]
+                if isopen[task.id] and task.duration < min_time:
+                    min_assignee = assignee
+            for assignee in assignments:
+                task = assignments[assignee][0]
+                if isopen[task.id]:
+                    task.duration -= min_task
+            
+            min_task = assignments[min_assignee][0]
+            if not min_task.child is None:
+                isopen[min_task.id] = True
+            
+            assignments[min_assignee].pop(0)
+            if len(assignments[min_assignee]) == 0:
+                del assignments[min_assignee]
+            
+            full_duration += min_time
+        
+        self.fitness_score = full_duration
+        return full_duration
+
 
     def mutate(self, assignees, mut_num: int=1):
         mutated_node = Chromosome(self.nodes)
