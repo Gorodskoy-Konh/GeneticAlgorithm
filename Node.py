@@ -1,8 +1,12 @@
 from datetime import datetime, timedelta
+from Assignee import Assigner
 
 class Node():
-    def __init__(self, depend_on, deadline: datetime, duration: timedelta, assigner=None) -> None:
-        self.depend_on = depend_on
+    def __init__(self, deadline: datetime, duration: timedelta, id:int, assignee: Assigner=None, order:int=1, child=None, parent=None) -> None:
+        self.parent = parent
+        self.child = child
         self.deadline = deadline
         self.duration = duration
-        self.assigner = assigner
+        self.assignee = assignee
+        self.order = order
+        self.id = id
