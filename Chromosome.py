@@ -20,12 +20,12 @@ class Chromosome:
             if parents[i] is not None:
                 self.nodes[i].parent = self.nodes[parents[i]]    
                 
-    def fitness(self, assignees: list[Assignee]):
+    def fitness(self):
         full_duration = timedelta(seconds=0)
         
         self.nodes.sort(key=lambda x: x.order)
         isopen = [False]*len(self.nodes)
-        assignments = {assignee.id:[] for assignee in assignees}
+        assignments = {assignee.id:[] for assignee in self.assignees}
         
         for node in self.nodes:
             assignments[node.assignee.id].append(node)
@@ -91,4 +91,14 @@ class Chromosome:
         return mutated_node
 
     def __correct_order(self):
-        pass
+        assignments = {assignee.id:[] for assignee in self.assignees}
+        
+        for node in self.nodes:
+            assignments[node.assignee.id].append(node)
+        
+        for a in assignments:
+            for i in range(len(assignments[a])):
+                for j in range(len(assignments[a])):
+                    if assignments[a][i].child == assignments[a][j]:
+                        assignments[a][i].order = assignments[a][j].order - 1
+        
