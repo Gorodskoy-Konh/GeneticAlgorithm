@@ -16,4 +16,4 @@ class Node():
         self.order = int(random.random() * ORDER_LIMIT)
 
     def copy(self):
-        copy.copy(self)
+        return copy.copy(self)
