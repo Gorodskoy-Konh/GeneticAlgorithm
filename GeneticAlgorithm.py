@@ -9,6 +9,13 @@ class GeneticAlgorithm():
         self.generation_size = generation_size
         self.assignees = assignees
         self.nodes = nodes
+        stack_list = set()
+        for node in nodes:
+            stack_list = stack_list.union(node.stack)
+        for assignee in assignees:
+            stack_list = stack_list.union(assignee.stack)
+        self.maximum_stack_difference = len(self.nodes)*len(stack_list)
+
         self.generation = self.__init_generation()
         for i in range(iterations):
             self.evolve(mutation_chance, crossover_chance, assignees)
