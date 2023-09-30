@@ -10,6 +10,8 @@ class Chromosome:
         self.maximum_stack_difference = maximum_stack_difference
         for node in nodes:
             self.nodes.append(node.copy())
+            if self.nodes[i].fixed_assignee:
+                continue
             assignee_random_idx = int(random.random() * len(assignees))
             self.nodes[-1].assignee = assignees[assignee_random_idx]
         for i in range(len(nodes)):
@@ -80,6 +82,8 @@ class Chromosome:
     def mutate(self, assignees, mut_chance: float=0.2):
         mutated_chromosome = self.copy()
         for i in range(len(self.nodes)):
+            if self.nodes[i].fixed_assignee:
+                continue
             if random.random() < mut_chance:
                 assignee_ind = int(random.random() * len(assignees))
                 mutated_chromosome.nodes[i].assignee = assignees[assignee_ind]
@@ -92,6 +96,8 @@ class Chromosome:
             change_rate = 0.5
         mutated_node = self.copy()
         for i in range(len(self.nodes)):
+            if self.nodes[i].fixed_assignee:
+                continue
             if random.random() > change_rate:
                 mutated_node.nodes[i] = chromosome.nodes[i].copy()
         #mutated_node.__correct_order()
