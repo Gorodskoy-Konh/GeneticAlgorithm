@@ -1,8 +1,8 @@
-from Chromosome import Chromosome
+from .Chromosome import Chromosome
 from datetime import datetime, timedelta
 import random
-from Assignee import Assignee
-from Node import Node
+from .Assignee import Assignee
+from .Node import Node
 
 class GeneticAlgorithm():
     def __init__(self, nodes: list[Node], assignees: list[Assignee], iterations: int=100, generation_size: int=100, mutation_chance: float=0.2, crossover_chance:float=0.2) -> None:

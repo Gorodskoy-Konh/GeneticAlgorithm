@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
-from Node import Node, ORDER_LIMIT
+from .Node import Node, ORDER_LIMIT
 import random
-from Assignee import Assignee
+from .Assignee import Assignee
 
 class Chromosome:
     def __init__(self, nodes: list[Node], assignees: list[Assignee], maximum_stack_difference: int) -> None:
@@ -10,7 +10,7 @@ class Chromosome:
         self.maximum_stack_difference = maximum_stack_difference
         for node in nodes:
             self.nodes.append(node.copy())
-            if self.nodes[i].fixed_assignee:
+            if node.fixed_assignee:
                 continue
             assignee_random_idx = int(random.random() * len(assignees))
             self.nodes[-1].assignee = assignees[assignee_random_idx]
@@ -124,6 +124,9 @@ class Chromosome:
                 order += 1
                 self.__dfs(t.id, used, order, assignments)
         
+    def compute_start_times(self):
+        pass
+
     def copy(self):
         nodes = []
         for node in self.nodes:

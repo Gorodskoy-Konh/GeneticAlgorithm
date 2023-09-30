@@ -1,30 +1,11 @@
-from GeneticAlgorithm import GeneticAlgorithm
+from genetic_algorithm.runner import run_algorithm
+from genetic_algorithm.GeneticAlgorithm import GeneticAlgorithm
 from datetime import timedelta, datetime
-from Assignee import Assignee
-from Task import Task
-from Assignee import Assignee
+from genetic_algorithm.Assignee import Assignee
+from genetic_algorithm.Task import Task
+from genetic_algorithm.Assignee import Assignee
 from datetime import timedelta
-from Node import Node
-
-def run_algorithm(tasks: list[Task], team_memebers: list[Assignee]) -> list[Task]:
-    for i, assignee in enumerate(team_memebers):
-        assignee.set_id(i)
-    nodes = []
-    for i, task in enumerate(tasks):
-        nodes.append(Node(task.deadline, task.duration, i, -1))
-        task.set_id(i)
-    for i, node in enumerate(nodes):
-        node.children = [nodes[j.id] for j in tasks[i].parents]
-        node.parents = [nodes[j.id] for j in tasks[i].depend_on]
-    ga = GeneticAlgorithm(nodes, team_memebers, iterations=1000, mutation_chance=0.85, crossover_chance=0.85)
-    best_chromosome = ga.get_best_solution()
-    print(best_chromosome.fitness_score)
-    print(str(best_chromosome))
-    answer = []
-
-    for node in best_chromosome.nodes:
-        answer.append(Task(node.deadline, node.duration, node.children, node.id, node.assignee))
-    return answer
+from genetic_algorithm.Node import Node
 
 if __name__ == '__main__':
     tasks = [

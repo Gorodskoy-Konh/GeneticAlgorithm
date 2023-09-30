@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 import random
-from Assignee import Assignee
+from .Assignee import Assignee
 
 ORDER_LIMIT = 100000
 

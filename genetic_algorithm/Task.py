@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
-from Assignee import Assignee
-from Node import Node
+from .Assignee import Assignee
+from .Node import Node
 
 class Task():
     def __init__(self, deadline: datetime, duration: timedelta, assignee: Assignee, backend_id: int = None, stack: set[str]={}, start: datetime=None) -> None:
