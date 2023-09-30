@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 import random
-import copy
 from Assignee import Assignee
 
 ORDER_LIMIT = 100000
@@ -16,4 +15,4 @@ class Node():
         self.order = order if order is not None else int(random.random() * ORDER_LIMIT)
 
     def copy(self):
-        return copy.copy(self)
+        return Node(self.deadline, self.duration, self.id, self.assignee, self.child, self.parent)
