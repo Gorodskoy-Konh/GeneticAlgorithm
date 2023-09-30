@@ -12,12 +12,10 @@ class Chromosome:
             assignee_random_idx = int(random.random() * len(assignees))
             self.nodes[-1].assignee = assignees[assignee_random_idx]
         for i in range(len(nodes)):
-            if not nodes[i].child is None:
-                self.nodes[i].child = self.nodes[nodes[i].child.id]
-            if not nodes[i].parent is None:
-                self.nodes[i].parent = self.nodes[nodes[i].parent.id]
+            self.nodes[i].child = [self.nodes[id]]
+            self.nodes[i].parent = self.nodes[nodes[i].parent.id]
         #self.__correct_order()
-                
+
     def fitness(self):
         full_duration = timedelta(seconds=0)
         nodes = []

@@ -1,7 +1,7 @@
 from datetime import time
 
 class Assignee():
-    def __init__(self, stack: set[str], schedule: list[list[list[time]]], backend_id: int = None) -> None:
+    def __init__(self, schedule: list[list[list[time]]], backend_id: int = None, stack: set[str]={}) -> None:
         self.stack = stack
         self.schedule = schedule
         self.backend_id = backend_id
