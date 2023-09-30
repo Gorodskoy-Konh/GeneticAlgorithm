@@ -26,17 +26,21 @@ class Chromosome:
         self.nodes.sort(key=lambda x: x.order)
         isopen = [False]*len(self.nodes)
         assignments = {assignee.id:[] for assignee in assignees}
-
+        
         for node in self.nodes:
             assignments[node.assignee.id].append(node)
-            if node.child is None:
+            if node.parent is None:
                 isopen[node.id] = True
+        for assignee in list(assignments.keys()):
+            if len(assignments[assignee]) == 0:
+                del assignments[assignee]
         # print(assignments)
 
         while len(assignments) > 0:
             print('\n')
             min_assignee = -1
             min_time = timedelta(days=1e3)
+            print(isopen)
             for assignee in assignments:
                 print(assignee, 'value =', assignments[assignee])
                 if len(assignments[assignee]) == 0:
@@ -50,10 +54,11 @@ class Chromosome:
                 task = assignments[assignee][0]
                 if isopen[task.id]:
                     task.duration -= min_time
-            print(min_assignee)
+            #print(assignments[min_assignee][0].id)
             min_task = assignments[min_assignee][0]
-            if not min_task.parent is None:
-                isopen[min_task.id] = True
+            print(f"Zalupa: {min_task.child}")
+            if not min_task.child is None:
+                isopen[min_task.child.id] = True
             
             assignments[min_assignee].pop(0)
             if len(assignments[min_assignee]) == 0:
