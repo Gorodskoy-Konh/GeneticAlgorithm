@@ -23,7 +23,7 @@ class Chromosome:
         full_duration = timedelta(seconds=0)
         full_stack_difference = 0
         try:
-            self.calcate_start_times()        
+            self.calcate_start_times()
         except:
             self.fitness_score = timedelta(days=1e3).total_seconds()
             return self.fitness_score
