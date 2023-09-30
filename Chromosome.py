@@ -4,7 +4,7 @@ import random
 from Assignee import Assignee
 
 class Chromosome:
-    def __init__(self, nodes: list[Node], assignees: list[Assignee]) -> None:
+    def __init__(self, nodes: list[Node], assignees: list[Assignee], maximum_stack_difference: int) -> None:
         self.nodes = []
         self.assignees = assignees
         for node in nodes:
@@ -18,10 +18,11 @@ class Chromosome:
 
     def fitness(self):
         full_duration = timedelta(seconds=0)
+        full_stack_difference = 0
         nodes = []
         for node in self.nodes:
             nodes.append(node.copy())
-
+            full_stack_difference += node.stack_difference()
         nodes.sort(key=lambda x: x.order)
         isopen = [False]*len(nodes)
         assignments = {assignee.id:[] for assignee in self.assignees}
@@ -71,8 +72,8 @@ class Chromosome:
             
             full_duration += min_time
         
-        self.fitness_score = full_duration
-        return full_duration
+        self.fitness_score = full_duration.seconds + full_stack_difference/self.maximum_stack_difference
+        return self.fitness_score
 
 
     def mutate(self, assignees, mut_chance: float=0.2):
