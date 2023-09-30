@@ -132,7 +132,7 @@ class Chromosome:
     
     def calcate_start_times(self):
         assignments = {assignee.id:[] for assignee in self.assignees}
-        assignees_time = {assignee.id:timedelta(seconds=0) for asignee in self.assignees}
+        assignees_time = {assignee.id:timedelta(seconds=0) for assignee in self.assignees}
         isopen = [False]*len(self.nodes)
         for node in self.nodes:
             assignments[node.assignee.id].append(node)
@@ -140,19 +140,21 @@ class Chromosome:
                 isopen[node.id] = True
         while(len(assignments) > 0):
             for assignee in assignments:
-                task = assignments[assignee.id][0]
+                task = assignments[assignee][0]
                 if isopen[task.id]:
                     for child in task.children:
-                        isopen[child.id] = True
+                        opening = True
+                        for parent in child.parents:
+                            opening *= isopen[parent.id]
+                        isopen[child.id] = opening
                     for parent in task.parents:
-                        assignees_time[assignee.id] = max(parent.start + parent.duration, assignees_time[assignee.id])
-                    task.set_start_time(assignees_time[assignee.id])
-                    assignees_time[assignee.id] += task.duration
-                    assignments[assignee.id].pop(0)
-
-            for assignee in assignments:
-                if len(assignments[assignee.id]) == 0:
-                    del assignments[assignee.id]
+                        assignees_time[assignee] = max(parent.start + parent.duration, assignees_time[assignee])
+                    task.set_start_time(assignees_time[assignee])
+                    assignees_time[assignee] += task.duration
+                    assignments[assignee].pop(0)
+            to_delete = [assignee for assignee in assignments if len(assignments[assignee]) == 0]
+            for assignee in to_delete:
+                del assignments[assignee]
                         
     def __str__(self):
         output = ""

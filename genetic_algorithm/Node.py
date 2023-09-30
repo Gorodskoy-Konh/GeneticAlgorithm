@@ -23,7 +23,7 @@ class Node():
     def __str__(self):
         # if self.child :
         #     return f"ID:{self.id}, Assignee:{self.assignee.id}, Duration:{self.duration}, Child:NO"
-        return f"ID:{self.id}, Assignee:{self.assignee.id}, Duration:{self.duration}, Child:{self.children}"
+        return f"ID:{self.id}, Assignee:{self.assignee.id}, Duration:{self.duration}, Start:{self.start}"
     
     def stack_difference(self):
         return len(self.stack.difference(self.assignee.stack))
