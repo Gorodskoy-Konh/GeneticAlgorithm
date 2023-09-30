@@ -7,6 +7,7 @@ class Chromosome:
     def __init__(self, nodes: list[Node], assignees: list[Assignee], maximum_stack_difference: int) -> None:
         self.nodes = []
         self.assignees = assignees
+        self.maximum_stack_difference = maximum_stack_difference
         for node in nodes:
             self.nodes.append(node.copy())
             assignee_random_idx = int(random.random() * len(assignees))
@@ -52,8 +53,8 @@ class Chromosome:
                     min_assignee = assignee
                     min_time = task.duration
             if min_assignee == -1:
-                self.fitness_score = timedelta(days=1e3)
-                return timedelta(days=1e3)
+                self.fitness_score = timedelta(days=1e3).seconds
+                return timedelta(days=1e3).seconds
 
             for assignee in assignments:
                 task = assignments[assignee][0]
@@ -72,7 +73,7 @@ class Chromosome:
             
             full_duration += min_time
         
-        self.fitness_score = full_duration.seconds + full_stack_difference/self.maximum_stack_difference
+        self.fitness_score = full_duration.seconds + full_stack_difference/max(self.maximum_stack_difference, 1)
         return self.fitness_score
 
 
@@ -121,7 +122,7 @@ class Chromosome:
         nodes = []
         for node in self.nodes:
             nodes.append(node.copy())
-        return Chromosome(nodes, self.assignees)
+        return Chromosome(nodes, self.assignees, self.maximum_stack_difference)
 
     def __str__(self):
         output = ""

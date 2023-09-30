@@ -5,7 +5,7 @@ from Assignee import Assignee
 ORDER_LIMIT = 100000
 
 class Node():
-    def __init__(self, deadline: datetime, duration: timedelta, id:int, assignee: Assignee=None, children=None, parents=None, order: int=None, stack: set[str]={}) -> None:
+    def __init__(self, deadline: datetime, duration: timedelta, id:int, assignee: Assignee=None, children=None, parents=None, order: int=None, stack: set[str]=set()) -> None:
         self.children = children
         self.parents = parents
         self.deadline = deadline

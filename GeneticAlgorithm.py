@@ -23,7 +23,7 @@ class GeneticAlgorithm():
     def __init_generation(self):
         generation = []
         for i in range(self.generation_size):
-            generation.append(Chromosome(self.nodes, self.assignees))
+            generation.append(Chromosome(self.nodes, self.assignees, self.maximum_stack_difference))
             generation[i].fitness()
         return generation
 
