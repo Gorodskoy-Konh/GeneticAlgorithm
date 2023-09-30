@@ -53,8 +53,8 @@ class Chromosome:
                     min_assignee = assignee
                     min_time = task.duration
             if min_assignee == -1:
-                self.fitness_score = timedelta(days=1e3).seconds
-                return timedelta(days=1e3).seconds
+                self.fitness_score = timedelta(days=1e3).total_seconds()
+                return self.fitness_score
 
             for assignee in assignments:
                 task = assignments[assignee][0]
@@ -73,7 +73,7 @@ class Chromosome:
             
             full_duration += min_time
         
-        self.fitness_score = full_duration.seconds + full_stack_difference/max(self.maximum_stack_difference, 1)
+        self.fitness_score = full_duration.total_seconds() + full_stack_difference/max(self.maximum_stack_difference, 1)
         return self.fitness_score
 
 
