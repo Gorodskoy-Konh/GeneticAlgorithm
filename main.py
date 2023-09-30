@@ -14,15 +14,15 @@ def run_algorithm(tasks: list[Task], team_memebers: list[Assignee]) -> list[Task
         nodes.append(Node(task.deadline, task.duration, i, -1))
         task.set_id(i)
     for i, node in enumerate(nodes):
-        node.child = [nodes[j.id] for j in tasks[i].parent]
-        node.parent = [nodes[j.id] for j in tasks[i].depend_on]
+        node.children = [nodes[j.id] for j in tasks[i].parents]
+        node.parents = [nodes[j.id] for j in tasks[i].depend_on]
     ga = GeneticAlgorithm(nodes, team_memebers, iterations=1000, mutation_chance=0.85, crossover_chance=0.85)
     best_chromosome = ga.get_best_solution()
     print(best_chromosome.fitness_score)
     print(str(best_chromosome))
     answer = []
     for node in best_chromosome.nodes:
-        answer.append(Task(node.deadline, node.duration, node.child, node.id, node.assignee))
+        answer.append(Task(node.deadline, node.duration, node.children, node.id, node.assignee))
     return answer
 
 tasks = [
