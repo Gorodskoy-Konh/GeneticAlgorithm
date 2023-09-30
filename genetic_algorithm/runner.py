@@ -6,7 +6,7 @@ from .Assignee import Assignee
 from datetime import timedelta
 from .Node import Node
 
-def run_algorithm(tasks: list[Task], team_memebers: list[Assignee]) -> list[Task]:
+def run_algorithm(tasks: list[Task], team_memebers: list[Assignee], start_sprint: datetime, end_sprint: datetime) -> list[Task]:
     for i, assignee in enumerate(team_memebers):
         assignee.set_id(i)
     nodes = []
@@ -16,16 +16,20 @@ def run_algorithm(tasks: list[Task], team_memebers: list[Assignee]) -> list[Task
     for i, node in enumerate(nodes):
         node.children = [nodes[j.id] for j in tasks[i].parents]
         node.parents = [nodes[j.id] for j in tasks[i].depend_on]
-    ga = GeneticAlgorithm(nodes, team_memebers, iterations=1000, mutation_chance=0.85, crossover_chance=0.85)
+    ga = GeneticAlgorithm(nodes, team_memebers, iterations=10, mutation_chance=0.85, crossover_chance=0.85)
     best_chromosome = ga.get_best_solution()
     print(best_chromosome.fitness_score)
     # answer = []
-    print(best_chromosome.fitness())
     best_chromosome.calcate_start_times()
     for node in best_chromosome.nodes:
-        tasks[i].write_answer(node.assignee, node.start)
+        #print(f"!{node.start}")
+        tasks[node.id].write_answer(node.assignee, node.start)
+        tasks[node.id].start = node.start - timedelta(seconds=0)
+        #print(f"#{tasks[i].start}")
         # answer.append(Task(node.deadline, node.duration, node.children, node.id, node.assignee, node.start))
     print(str(best_chromosome))
+    #for i in range(len(tasks)):
+    #    print(f"{tasks[i].start} ??")
     return tasks
 
 # if __name__ == '__main__':

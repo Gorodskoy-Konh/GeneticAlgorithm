@@ -34,4 +34,4 @@ if __name__ == '__main__':
     tasks[12].set_depend_on([tasks[11]])
     tasks[13].set_depend_on([tasks[12]])
     tasks[14].set_depend_on([tasks[13]])
-    run_algorithm(tasks, [Assignee(0, None), Assignee(1, None), Assignee(2, None), Assignee(3, None)])
+    result = run_algorithm(tasks, [Assignee(0, None), Assignee(1, None), Assignee(2, None), Assignee(3, None)])
