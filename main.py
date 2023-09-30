@@ -28,21 +28,21 @@ def run_algorithm(tasks: list[Task], team_memebers: list[Assignee]) -> list[Task
     return answer
 
 tasks = [
-    Task(None, timedelta(seconds=5), None, 0, None),
-    Task(None, timedelta(seconds=2), None, 1, None),
-    Task(None, timedelta(seconds=3), None, 2, None),
-    Task(None, timedelta(seconds=7), None, 3, None),
-    Task(None, timedelta(seconds=1), None, 4, None),
-    Task(None, timedelta(seconds=10), None, 5, None),
-    Task(None, timedelta(seconds=2), None, 6, None),
-    Task(None, timedelta(seconds=8), None, 7, None),
-    Task(None, timedelta(seconds=3), None, 8, None),
-    Task(None, timedelta(seconds=4), None, 9, None),
-    Task(None, timedelta(seconds=2), None, 10, None),
-    Task(None, timedelta(seconds=2), None, 11, None),
-    Task(None, timedelta(seconds=2), None, 12, None),
-    Task(None, timedelta(seconds=2), None, 13, None),
-    Task(None, timedelta(seconds=2), None, 14, None),
+    Task(None, timedelta(seconds=5), 0, None),
+    Task(None, timedelta(seconds=2), 1, None),
+    Task(None, timedelta(seconds=3), 2, None),
+    Task(None, timedelta(seconds=7), 3, None),
+    Task(None, timedelta(seconds=1), 4, None),
+    Task(None, timedelta(seconds=10), 5, None),
+    Task(None, timedelta(seconds=2), 6, None),
+    Task(None, timedelta(seconds=8), 7, None),
+    Task(None, timedelta(seconds=3), 8, None),
+    Task(None, timedelta(seconds=4), 9, None),
+    Task(None, timedelta(seconds=2), 10, None),
+    Task(None, timedelta(seconds=2), 11, None),
+    Task(None, timedelta(seconds=2), 12, None),
+    Task(None, timedelta(seconds=2), 13, None),
+    Task(None, timedelta(seconds=2), 14, None),
 ]
 tasks[2].set_depend_on(tasks[1])
 tasks[3].set_depend_on(tasks[2])
