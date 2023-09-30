@@ -14,12 +14,15 @@ class Chromosome:
                 
     def fitness(self):
         full_duration = timedelta(seconds=0)
-        
-        self.nodes.sort(key=lambda x: x.order)
-        isopen = [False]*len(self.nodes)
+        nodes = []
+        for node in self.nodes:
+            nodes.append(node.copy())
+
+        nodes.sort(key=lambda x: x.order)
+        isopen = [False]*len(nodes)
         assignments = {assignee.id:[] for assignee in self.assignees}
         
-        for node in self.nodes:
+        for node in nodes:
             assignments[node.assignee.id].append(node)
             if node.parent is None:
                 isopen[node.id] = True
@@ -42,6 +45,9 @@ class Chromosome:
                 task = assignments[assignee][0]
                 if isopen[task.id] and task.duration < min_time:
                     min_assignee = assignee
+                    min_time = task.duration
+            
+
             for assignee in assignments:
                 task = assignments[assignee][0]
                 if isopen[task.id]:
@@ -121,3 +127,9 @@ class Chromosome:
         for node in self.nodes:
             nodes.append(node.copy())
         return Chromosome(nodes, self.assignees)
+
+    def __str__(self):
+        output = ""
+        for node in self.nodes:
+            output += str(node) + '\n'
+        return output

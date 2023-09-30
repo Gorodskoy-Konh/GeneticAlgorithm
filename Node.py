@@ -5,7 +5,7 @@ from Assignee import Assignee
 ORDER_LIMIT = 100000
 
 class Node():
-    def __init__(self, deadline: datetime, duration: timedelta, id:int, assignee=None, child=None, parent=None, order=None) -> None:
+    def __init__(self, deadline: datetime, duration: timedelta, id:int, assignee: Assignee=None, child=None, parent=None, order=None) -> None:
         self.child = child
         self.parent = parent
         self.deadline = deadline
@@ -16,3 +16,8 @@ class Node():
 
     def copy(self):
         return Node(self.deadline, self.duration, self.id, self.assignee, self.child, self.parent)
+
+    def __str__(self):
+        if self.child is None:
+            return f"Assignee:{self.assignee.id}, Duration:{self.duration}, Child:NO"
+        return f"Assignee:{self.assignee.id}, Duration:{self.duration}, Child:{self.child.id}"

@@ -9,7 +9,12 @@ from Node import Node
 def run_algorithm(tasks: list[Task], team_memebers: list[Assignee]) -> list[Task]:
     nodes = []
     for i, task in enumerate(tasks):
-        nodes.append(Node(task.deadline, task.duration, i, child=task.depend_on, parent=task.parent))
+        nodes.append(Node(task.deadline, task.duration, i))
+    for i, node in enumerate(nodes):
+        if not tasks[i].depend_on is None:
+            node.child = nodes[tasks[i].depend_on.id]
+        if not tasks[i].parent is None:
+            node.parent = nodes[tasks[i].parent.id]
     ga = GeneticAlgorithm(nodes, team_memebers)
     best_chromosome = ga.get_best_solution()
     answer = []
@@ -25,4 +30,4 @@ tasks = [
 ]
 tasks[2].depend_on = tasks[1]
 tasks[3].depend_on = tasks[2]
-run_algorithm(tasks, [Assignee(0, None, None), Assignee(1, None, None), Assignee(2, None, None)])
+run_algorithm(tasks, [Assignee(0, None, None), Assignee(1, None, None)])
