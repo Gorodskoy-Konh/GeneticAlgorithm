@@ -16,6 +16,7 @@ class GeneticAlgorithm():
         generation = []
         for i in range(self.generation_size):
             generation.append(Chromosome(deadlines=deadlines, durations=durations, children=children, parents=parents, assignees=self.assignees))
+            generation[i].fitness()
         return generation
 
     def evolve(self, mutation_chance, crossover_chance, assignees):
@@ -29,6 +30,7 @@ class GeneticAlgorithm():
             self.generation[i].fitness()
         self.generation.sort(key=lambda x: -x.fitness_score)
         self.generation = self.generation[:self.generation_size]
+        print(f'Best fitness for epoch: {self.get_best_solution().fitness_score}')
     
     def get_best_solution(self):
         return self.generation[0]
