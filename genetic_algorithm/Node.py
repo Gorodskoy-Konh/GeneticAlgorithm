@@ -14,6 +14,7 @@ class Node():
         self.fixed_assignee = fixed_assignee
         self.id = id
         self.stack = stack
+        self.start = None
         self.order = order if order is not None else int(random.random() * ORDER_LIMIT)
 
     def copy(self):
@@ -26,3 +27,6 @@ class Node():
     
     def stack_difference(self):
         return len(self.stack.difference(self.assignee.stack))
+    
+    def set_start_time(self, start):
+        self.start = start

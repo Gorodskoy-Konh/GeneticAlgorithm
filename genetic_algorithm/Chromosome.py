@@ -123,9 +123,6 @@ class Chromosome:
             if not used[t.id]:
                 order += 1
                 self.__dfs(t.id, used, order, assignments)
-        
-    def compute_start_times(self):
-        pass
 
     def copy(self):
         nodes = []
