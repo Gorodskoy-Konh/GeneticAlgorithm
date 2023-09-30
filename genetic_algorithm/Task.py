@@ -25,3 +25,7 @@ class Task():
     
     def set_id(self, id: int):
         self.id = id
+    
+    def write_answer(self, assignee, start):
+        self.start = start
+        self.assignee = assignee
