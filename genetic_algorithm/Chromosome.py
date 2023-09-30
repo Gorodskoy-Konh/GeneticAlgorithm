@@ -129,7 +129,31 @@ class Chromosome:
         for node in self.nodes:
             nodes.append(node.copy())
         return Chromosome(nodes, self.assignees, self.maximum_stack_difference)
+    
+    def calcate_start_times(self):
+        assignments = {assignee.id:[] for assignee in self.assignees}
+        assignees_time = {assignee.id:timedelta(seconds=0) for asignee in self.assignees}
+        isopen = [False]*len(self.nodes)
+        for node in self.nodes:
+            assignments[node.assignee.id].append(node)
+            if len(node.parents) == 0:
+                isopen[node.id] = True
+        while(len(assignments) > 0):
+            for assignee in assignments:
+                task = assignments[assignee.id][0]
+                if isopen[task.id]:
+                    for child in task.children:
+                        isopen[child.id] = True
+                    for parent in task.parents:
+                        assignees_time[assignee.id] = max(parent.start + parent.duration, assignees_time[assignee.id])
+                    task.set_start_time(assignees_time[assignee.id])
+                    assignees_time[assignee.id] += task.duration
+                    assignments[assignee.id].pop(0)
 
+            for assignee in assignments:
+                if len(assignments[assignee.id]) == 0:
+                    del assignments[assignee.id]
+                        
     def __str__(self):
         output = ""
         for node in self.nodes:
