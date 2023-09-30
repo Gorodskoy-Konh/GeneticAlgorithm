@@ -100,6 +100,10 @@ class Chromosome:
             assignments[node.assignee.id].append(node)
             if len(node.parents) == 0:
                 isopen[node.id] = True
+        
+        to_delete = [assignee for assignee in assignments if len(assignments[assignee]) == 0]
+        for assignee in to_delete:
+            del assignments[assignee]
 
         while(len(assignments) > 0):
             changed = False
