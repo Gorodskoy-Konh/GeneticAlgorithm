@@ -5,9 +5,9 @@ from Assignee import Assignee
 ORDER_LIMIT = 100000
 
 class Node():
-    def __init__(self, deadline: datetime, duration: timedelta, id:int, assignee: Assignee=None, child=None, parent=None, order: int=None, stack: set[str]={}) -> None:
-        self.child = child
-        self.parent = parent
+    def __init__(self, deadline: datetime, duration: timedelta, id:int, assignee: Assignee=None, children=None, parents=None, order: int=None, stack: set[str]={}) -> None:
+        self.children = children
+        self.parents = parents
         self.deadline = deadline
         self.duration = duration
         self.assignee = assignee
@@ -16,12 +16,12 @@ class Node():
         self.order = order if order is not None else int(random.random() * ORDER_LIMIT)
 
     def copy(self):
-        return Node(self.deadline, self.duration, self.id, self.assignee, self.child, self.parent)
+        return Node(self.deadline, self.duration, self.id, self.assignee, self.children, self.parents)
 
     def __str__(self):
         # if self.child :
         #     return f"ID:{self.id}, Assignee:{self.assignee.id}, Duration:{self.duration}, Child:NO"
-        return f"ID:{self.id}, Assignee:{self.assignee.id}, Duration:{self.duration}, Child:{self.child}"
+        return f"ID:{self.id}, Assignee:{self.assignee.id}, Duration:{self.duration}, Child:{self.children}"
     
     def stack_difference(self):
         return len(self.stack.difference(self.assignee.stack))

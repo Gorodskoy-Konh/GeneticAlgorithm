@@ -7,15 +7,15 @@ class Task():
         self.deadline = deadline
         self.duration = duration
         self.assignee = assignee
-        self.depend_on = None
-        self.parent = None
+        self.depend_on = []
+        self.parents = []
         self.backend_id = backend_id
         self.stack = stack
     
     def set_depend_on(self, depend_on):
         self.depend_on = depend_on
-        if not self.depend_on is None:
-            self.depend_on.parent = self
+        for parent in self.depend_on:
+            parent.parents.append(self)
     
     def set_id(self, id: int):
         self.id = id

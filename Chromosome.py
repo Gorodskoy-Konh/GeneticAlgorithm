@@ -12,8 +12,8 @@ class Chromosome:
             assignee_random_idx = int(random.random() * len(assignees))
             self.nodes[-1].assignee = assignees[assignee_random_idx]
         for i in range(len(nodes)):
-            self.nodes[i].child = [self.nodes[id]]
-            self.nodes[i].parent = self.nodes[nodes[i].parent.id]
+            self.nodes[i].children = [self.nodes[node.id] for node in nodes[i].children]
+            self.nodes[i].parents = [self.nodes[node.id] for node in self.nodes[i].parents]
         #self.__correct_order()
 
     def fitness(self):
@@ -28,7 +28,7 @@ class Chromosome:
         
         for node in nodes:
             assignments[node.assignee.id].append(node)
-            if node.parent is None:
+            if len(node.parents) == 0:
                 isopen[node.id] = True
         for assignee in list(assignments.keys()):
             if len(assignments[assignee]) == 0:
@@ -62,8 +62,8 @@ class Chromosome:
             min_task = assignments[min_assignee][0]
             #if not min_task.child is None:
                 #print(f"Zalupa: {min_task.child}, id: {min_task.id}")
-            if not min_task.child is None:
-                isopen[min_task.child.id] = True
+            for child in min_task.children:
+                isopen[child.id] = True
             
             assignments[min_assignee].pop(0)
             if len(assignments[min_assignee]) == 0:
@@ -97,16 +97,9 @@ class Chromosome:
 
     def __correct_order(self):
         assignments = {assignee.id:[] for assignee in self.assignees}
-        # node2assignee = {node.id:node}
         for node in self.nodes:
             assignments[node.assignee.id].append(node)
-        
-        # for a in assignments:
-        #     for i in range(len(assignments[a])):
-        #         for j in range(len(assignments[a])):
-        #             if assignments[a][i].child is not None and assignments[a][i].child.id == assignments[a][j].id:
-        #                 assignments[a][i].order = assignments[a][j].order - 1
-        
+                
         used = [False]*len(self.nodes)
         iter_range = list(range(len(self.nodes)))
         random.shuffle(iter_range)
@@ -122,15 +115,6 @@ class Chromosome:
             if not used[t.id]:
                 order += 1
                 self.__dfs(t.id, used, order, assignments)
-        
-        
-        #if self.nodes[v].child is None:
-        #    return
-        # self.nodes[v].order = order
-
-        # if not used[self.nodes[v].child.id]:
-        #     self.__dfs(self.nodes[v].child.id, used, order + 1, assignments)
-
         
     def copy(self):
         nodes = []
