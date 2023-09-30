@@ -22,6 +22,22 @@ class Chromosome:
     def fitness(self):
         full_duration = timedelta(seconds=0)
         full_stack_difference = 0
+
+        assignments = {assignee.id:[] for assignee in self.assignees}
+        for node in self.nodes:
+            assignments[node.assignee.id].append(node)
+        
+        total_similarity = 0
+        for assignee in assignments:
+            similarity = 0
+            for i in range(len(assignments[assignee])-1):
+                if not assignments[assignee][i].project is None and not assignments[assignee][i+1].project is None:
+                    similarity += (assignments[assignee][i].project == assignments[assignee][i+1].project)
+            if len(assignments[assignee]) == 0:
+                similarity = 0
+            else:
+                similarity = similarity/len(assignments[assignee])
+            total_similarity += similarity
         try:
             self.calcate_start_times()
         except:
@@ -31,7 +47,7 @@ class Chromosome:
         for node in self.nodes:
             full_duration = max(full_duration, node.start + node.duration)
 
-        self.fitness_score = full_duration.total_seconds() + full_stack_difference/max(self.maximum_stack_difference, 1)
+        self.fitness_score = full_duration.total_seconds() + full_stack_difference/max(self.maximum_stack_difference, 1) + total_similarity/len(self.assignees)
         return self.fitness_score
 
 

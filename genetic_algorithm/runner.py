@@ -11,12 +11,12 @@ def run_algorithm(tasks: list[Task], team_memebers: list[Assignee], start_sprint
         assignee.set_id(i)
     nodes = []
     for i, task in enumerate(tasks):
-        nodes.append(Node(task.deadline, task.duration, i, -1))
+        nodes.append(Node(task.deadline, task.duration, i, -1, project=task.project))
         task.set_id(i)
     for i, node in enumerate(nodes):
         node.children = [nodes[j.id] for j in tasks[i].parents]
         node.parents = [nodes[j.id] for j in tasks[i].depend_on]
-    ga = GeneticAlgorithm(nodes, team_memebers, iterations=5000, mutation_chance=0.85, crossover_chance=0.85)
+    ga = GeneticAlgorithm(nodes, team_memebers, iterations=1000, mutation_chance=0.85, crossover_chance=0.85)
     best_chromosome = ga.get_best_solution()
     print(best_chromosome.fitness_score)
     best_chromosome.calcate_start_times()
@@ -26,7 +26,7 @@ def run_algorithm(tasks: list[Task], team_memebers: list[Assignee], start_sprint
     
     for node in best_chromosome.nodes:
         tasks[node.id].write_answer(node.assignee, node.start)
-        if task.duration + task.start <= sprint_duration:
+        if tasks[node.id].duration + tasks[node.id].start <= sprint_duration:
             new_tasks.append(tasks[node.id])
     print(str(best_chromosome))
     return new_tasks
