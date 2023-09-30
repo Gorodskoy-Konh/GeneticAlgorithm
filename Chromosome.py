@@ -4,21 +4,12 @@ import random
 from Assignee import Assignee
 
 class Chromosome:
-    def __init__(self, deadlines: list[datetime], durations: list[timedelta], children: list[int], parents: list[int], assignees: list[Assignee]) -> None:
+    def __init__(self, nodes: list[Node], assignees: list[Assignee]) -> None:
         self.nodes = []
-        self.deadlines = deadlines
-        self.durations = durations
-        self.children = children
-        self.parents = parents
-        self.assignees = assignees
-        for i in range(len(deadlines)):
+        for node in nodes:
+            self.nodes.append(node.copy())
             assignee_random_idx = int(random.random() * len(assignees))
-            self.nodes.append(Node(deadlines[i], durations[i], i, assignees[assignee_random_idx]))
-        for i in range(len(deadlines)):
-            if children[i] is not None:
-                self.nodes[i].child = self.nodes[children[i]]
-            if parents[i] is not None:
-                self.nodes[i].parent = self.nodes[parents[i]]    
+            node.assignee = assignees[assignee_random_idx]   
                 
     def fitness(self):
         full_duration = timedelta(seconds=0)
