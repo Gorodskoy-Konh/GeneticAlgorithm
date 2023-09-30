@@ -1,8 +1,10 @@
 from datetime import time
 
 class Assignee():
-    def __init__(self, id: int, stack: set[str], schedule: list[list[list[time]]], backend_id: int = None) -> None:
-        self.id = id
+    def __init__(self, stack: set[str], schedule: list[list[list[time]]], backend_id: int = None) -> None:
         self.stack = stack
         self.schedule = schedule
-        #self.backend_id = backend_id
+        self.backend_id = backend_id
+
+    def set_id(self, id: int):
+        self.id = id 

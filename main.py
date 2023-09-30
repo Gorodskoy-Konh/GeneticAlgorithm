@@ -7,15 +7,18 @@ from datetime import datetime, timedelta
 from Node import Node
 
 def run_algorithm(tasks: list[Task], team_memebers: list[Assignee]) -> list[Task]:
+    for i, assignee in enumerate(team_memebers):
+        assignee.set_id(i)
     nodes = []
     for i, task in enumerate(tasks):
         nodes.append(Node(task.deadline, task.duration, i, -1))
+        task.set_id(i)
     for i, node in enumerate(nodes):
         if not tasks[i].parent is None:
             node.child = nodes[tasks[i].parent.id]
         if not tasks[i].depend_on is None:
             node.parent = nodes[tasks[i].depend_on.id]
-    ga = GeneticAlgorithm(nodes, team_memebers, iterations=10000, mutation_chance=0.85, crossover_chance=0.85)
+    ga = GeneticAlgorithm(nodes, team_memebers, iterations=1000, mutation_chance=0.85, crossover_chance=0.85)
     best_chromosome = ga.get_best_solution()
     print(best_chromosome.fitness_score)
     print(str(best_chromosome))
