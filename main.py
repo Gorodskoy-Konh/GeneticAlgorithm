@@ -23,7 +23,7 @@ def run_algorithm(tasks: list[Task], team_memebers: list[Assignee]) -> list[Task
     answer = []
 
     for node in best_chromosome.nodes:
-        answer.append(Task(node.deadline, node.duration, node.children, node.id, node.assignee))
+        answer.append(Task(node.deadline, node.duration, node.children, node.id, node.assignee, node.start_time))
     return answer
 
 tasks = [

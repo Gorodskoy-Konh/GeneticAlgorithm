@@ -25,3 +25,6 @@ class Node():
     
     def stack_difference(self):
         return len(self.stack.difference(self.assignee.stack))
+    
+    def set_start_time(self, start_time: timedelta):
+        self.start_time = start_time
