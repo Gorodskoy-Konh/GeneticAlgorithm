@@ -22,59 +22,15 @@ class Chromosome:
     def fitness(self):
         full_duration = timedelta(seconds=0)
         full_stack_difference = 0
-        nodes = []
+        try:
+            self.calcate_start_times()        
+        except:
+            self.fitness_score = timedelta(days=1e3).total_seconds()
+            return self.fitness_score
+
         for node in self.nodes:
-            nodes.append(node.copy())
-            full_stack_difference += node.stack_difference()
-        nodes.sort(key=lambda x: x.order)
-        isopen = [False]*len(nodes)
-        assignments = {assignee.id:[] for assignee in self.assignees}
-        
-        for node in nodes:
-            assignments[node.assignee.id].append(node)
-            if len(node.parents) == 0:
-                isopen[node.id] = True
-        for assignee in list(assignments.keys()):
-            if len(assignments[assignee]) == 0:
-                del assignments[assignee]
-        #print(assignments)
+            full_duration = max(full_duration, node.start + node.duration)
 
-        while len(assignments) > 0:
-            #print('\n')
-            min_assignee = -1
-            min_time = timedelta(days=1e3)
-            #print(isopen)
-            for assignee in assignments:
-                # print(assignee, 'value =', assignments[assignee])
-                # print('ids:', [assignments[assignee][i].id for i in range(len(assignments[assignee]))])
-                # print('children:', [assignments[assignee][i].child.id if assignments[assignee][i].child is not None else None for i in range(len(assignments[assignee]))])
-                # print('orders:', [assignments[assignee][i].order for i in range(len(assignments[assignee]))])
-                
-                task = assignments[assignee][0]
-                if isopen[task.id] and task.duration < min_time:
-                    min_assignee = assignee
-                    min_time = task.duration
-            if min_assignee == -1:
-                self.fitness_score = timedelta(days=1e3).total_seconds()
-                return self.fitness_score
-
-            for assignee in assignments:
-                task = assignments[assignee][0]
-                if isopen[task.id]:
-                    task.duration -= min_time
-            #print(assignments[min_assignee][0].id)
-            min_task = assignments[min_assignee][0]
-            #if not min_task.child is None:
-                #print(f"Zalupa: {min_task.child}, id: {min_task.id}")
-            for child in min_task.children:
-                isopen[child.id] = True
-            
-            assignments[min_assignee].pop(0)
-            if len(assignments[min_assignee]) == 0:
-                del assignments[min_assignee]
-            
-            full_duration += min_time
-        
         self.fitness_score = full_duration.total_seconds() + full_stack_difference/max(self.maximum_stack_difference, 1)
         return self.fitness_score
 
@@ -142,25 +98,35 @@ class Chromosome:
             assignments[node.assignee.id].append(node)
             if len(node.parents) == 0:
                 isopen[node.id] = True
+
         while(len(assignments) > 0):
+            changed = False
+            #print(isopen)
             for assignee in assignments:
+                
+                #print('ids:', [assignments[assignee][i].id for i in range(len(assignments[assignee]))])
+                #print('orders:', [assignments[assignee][i].order for i in range(len(assignments[assignee]))])
+                
                 task = assignments[assignee][0]
                 if isopen[task.id]:
                     for child in task.children:
-                        opening = True
+                        opening = 1
                         for parent in child.parents:
                             opening *= isopen[parent.id]
-                        isopen[child.id] = opening
+                        isopen[child.id] = (opening == 1)
                     for parent in task.parents:
                         assignees_time[assignee] = max(parent.start + parent.duration, assignees_time[assignee])
                     task.set_start_time(assignees_time[assignee])
                     self.nodes[task.id].set_start_time(assignees_time[assignee])
                     assignees_time[assignee] += task.duration
                     assignments[assignee].pop(0)
+                    changed = True
             to_delete = [assignee for assignee in assignments if len(assignments[assignee]) == 0]
             for assignee in to_delete:
                 del assignments[assignee]
-                        
+            if changed == False:
+                raise Exception("infinity")
+            
     def __str__(self):
         output = ""
         for node in self.nodes:
