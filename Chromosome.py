@@ -52,7 +52,7 @@ class Chromosome:
                     task.duration -= min_time
             print(min_assignee)
             min_task = assignments[min_assignee][0]
-            if not min_task.child is None:
+            if not min_task.parent is None:
                 isopen[min_task.id] = True
             
             assignments[min_assignee].pop(0)
