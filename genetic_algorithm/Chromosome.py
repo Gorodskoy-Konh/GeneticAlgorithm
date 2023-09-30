@@ -131,10 +131,14 @@ class Chromosome:
         return Chromosome(nodes, self.assignees, self.maximum_stack_difference)
     
     def calcate_start_times(self):
+        nodes = []
+        for node in self.nodes:
+            nodes.append(node.copy())
+        nodes.sort(key=lambda x: x.order)
         assignments = {assignee.id:[] for assignee in self.assignees}
         assignees_time = {assignee.id:timedelta(seconds=0) for assignee in self.assignees}
-        isopen = [False]*len(self.nodes)
-        for node in self.nodes:
+        isopen = [False]*len(nodes)
+        for node in nodes:
             assignments[node.assignee.id].append(node)
             if len(node.parents) == 0:
                 isopen[node.id] = True
@@ -150,6 +154,7 @@ class Chromosome:
                     for parent in task.parents:
                         assignees_time[assignee] = max(parent.start + parent.duration, assignees_time[assignee])
                     task.set_start_time(assignees_time[assignee])
+                    self.nodes[task.id].set_start_time(assignees_time[assignee])
                     assignees_time[assignee] += task.duration
                     assignments[assignee].pop(0)
             to_delete = [assignee for assignee in assignments if len(assignments[assignee]) == 0]
