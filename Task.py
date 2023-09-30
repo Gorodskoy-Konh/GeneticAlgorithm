@@ -9,5 +9,6 @@ class Task():
         self.depend_on = depend_on
         self.assignee = assignee
         self.parent = None
-        self.depend_on.parent = self
+        if not self.depend_on is None:
+            self.depend_on.parent = self
         self.id = -1

@@ -6,10 +6,11 @@ from Assignee import Assignee
 class Chromosome:
     def __init__(self, nodes: list[Node], assignees: list[Assignee]) -> None:
         self.nodes = []
+        self.assignees = assignees
         for node in nodes:
             self.nodes.append(node.copy())
             assignee_random_idx = int(random.random() * len(assignees))
-            node.assignee = assignees[assignee_random_idx]   
+            self.nodes[-1].assignee = assignees[assignee_random_idx]   
                 
     def fitness(self):
         full_duration = timedelta(seconds=0)
@@ -62,7 +63,7 @@ class Chromosome:
 
 
     def mutate(self, assignees, mut_num: int=1):
-        mutated_chromosome = Chromosome(self.deadlines, self.durations, self.children, self.parents, self.assignees)
+        mutated_chromosome = self.copy()
         for i in range(mut_num):
             node_ind = int(random.random() * len(self.nodes))
             assignee_ind = int(random.random() * len(assignees))
@@ -74,7 +75,7 @@ class Chromosome:
     def crossover(self, chromosome, change_rate: float=0.5):
         if change_rate >= 1 or change_rate <= 0:
             change_rate = 0.5
-        mutated_node = Chromosome(self.deadlines, self.durations, self.children, self.parents, self.assignees)
+        mutated_node = self.copy()
         for i in range(len(self.nodes)):
             if random.random() > change_rate:
                 mutated_node.nodes[i] = chromosome.nodes[i].copy()
@@ -114,3 +115,9 @@ class Chromosome:
             if not used[t.id]:
                 order += 1
                 self.__dfs(t.id, used, order, assignments)
+    
+    def copy(self):
+        nodes = []
+        for node in self.nodes:
+            nodes.append(node.copy())
+        return Chromosome(nodes, self.assignees)
