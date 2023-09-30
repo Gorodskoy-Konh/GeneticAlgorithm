@@ -19,5 +19,7 @@ class Node():
 
     def __str__(self):
         if self.child is None:
-            return f"Assignee:{self.assignee.id}, Duration:{self.duration}, Child:NO"
-        return f"Assignee:{self.assignee.id}, Duration:{self.duration}, Child:{self.child.id}"
+            if self.assignee is None:
+                raise Exception(f"ID:{self.id} I AM AN IDIOT!")
+            return f"ID:{self.id}, Assignee:{self.assignee.id}, Duration:{self.duration}, Child:NO"
+        return f"ID:{self.id}, Assignee:{self.assignee.id}, Duration:{self.duration}, Child:{self.child.id}"

@@ -31,8 +31,8 @@ class GeneticAlgorithm():
             self.generation[i].fitness()
         self.generation.sort(key=lambda x: x.fitness_score)
         self.generation = self.generation[:self.generation_size]
-        print(f'Best fitness for epoch: {self.get_best_solution().fitness_score}')
-        print(str(self.get_best_solution()))
+        #print(f'Best fitness for epoch: {self.get_best_solution().fitness_score}')
+        #print(str(self.get_best_solution()))
     
     def get_best_solution(self):
         return self.generation[0]

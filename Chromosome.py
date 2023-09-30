@@ -10,7 +10,13 @@ class Chromosome:
         for node in nodes:
             self.nodes.append(node.copy())
             assignee_random_idx = int(random.random() * len(assignees))
-            self.nodes[-1].assignee = assignees[assignee_random_idx]   
+            self.nodes[-1].assignee = assignees[assignee_random_idx]
+        for i in range(len(nodes)):
+            if not nodes[i].child is None:
+                self.nodes[i].child = self.nodes[nodes[i].child.id]
+            if not nodes[i].parent is None:
+                self.nodes[i].parent = self.nodes[nodes[i].parent.id]
+        #self.__correct_order()
                 
     def fitness(self):
         full_duration = timedelta(seconds=0)
@@ -29,13 +35,13 @@ class Chromosome:
         for assignee in list(assignments.keys()):
             if len(assignments[assignee]) == 0:
                 del assignments[assignee]
-        # print(assignments)
+        #print(assignments)
 
         while len(assignments) > 0:
-            # print('\n')
+            #print('\n')
             min_assignee = -1
             min_time = timedelta(days=1e3)
-            # print(isopen)
+            #print(isopen)
             for assignee in assignments:
                 # print(assignee, 'value =', assignments[assignee])
                 # print('ids:', [assignments[assignee][i].id for i in range(len(assignments[assignee]))])
@@ -46,7 +52,9 @@ class Chromosome:
                 if isopen[task.id] and task.duration < min_time:
                     min_assignee = assignee
                     min_time = task.duration
-            
+            if min_assignee == -1:
+                self.fitness_score = timedelta(days=1e3)
+                return timedelta(days=1e3)
 
             for assignee in assignments:
                 task = assignments[assignee][0]
@@ -54,7 +62,8 @@ class Chromosome:
                     task.duration -= min_time
             #print(assignments[min_assignee][0].id)
             min_task = assignments[min_assignee][0]
-            # print(f"Zalupa: {min_task.child}, id: {min_task.id}")
+            #if not min_task.child is None:
+                #print(f"Zalupa: {min_task.child}, id: {min_task.id}")
             if not min_task.child is None:
                 isopen[min_task.child.id] = True
             
@@ -68,14 +77,14 @@ class Chromosome:
         return full_duration
 
 
-    def mutate(self, assignees, mut_num: int=1):
+    def mutate(self, assignees, mut_chance: float=0.2):
         mutated_chromosome = self.copy()
-        for i in range(mut_num):
-            node_ind = int(random.random() * len(self.nodes))
-            assignee_ind = int(random.random() * len(assignees))
-            mutated_chromosome.nodes[node_ind].assignee = assignees[assignee_ind]
-            mutated_chromosome.nodes[node_ind].order = random.random() * ORDER_LIMIT
-        mutated_chromosome.__correct_order()
+        for i in range(len(self.nodes)):
+            if random.random() < mut_chance:
+                assignee_ind = int(random.random() * len(assignees))
+                mutated_chromosome.nodes[i].assignee = assignees[assignee_ind]
+                mutated_chromosome.nodes[i].order = random.random() * ORDER_LIMIT
+        #mutated_chromosome.__correct_order()
         return mutated_chromosome
 
     def crossover(self, chromosome, change_rate: float=0.5):
@@ -85,7 +94,7 @@ class Chromosome:
         for i in range(len(self.nodes)):
             if random.random() > change_rate:
                 mutated_node.nodes[i] = chromosome.nodes[i].copy()
-        mutated_node.__correct_order()
+        #mutated_node.__correct_order()
         return mutated_node
 
     def __correct_order(self):
@@ -94,11 +103,11 @@ class Chromosome:
         for node in self.nodes:
             assignments[node.assignee.id].append(node)
         
-        for a in assignments:
-            for i in range(len(assignments[a])):
-                for j in range(len(assignments[a])):
-                    if assignments[a][i].child is not None and assignments[a][i].child.id == assignments[a][j].id:
-                        assignments[a][i].order = assignments[a][j].order - 1
+        # for a in assignments:
+        #     for i in range(len(assignments[a])):
+        #         for j in range(len(assignments[a])):
+        #             if assignments[a][i].child is not None and assignments[a][i].child.id == assignments[a][j].id:
+        #                 assignments[a][i].order = assignments[a][j].order - 1
         
         used = [False]*len(self.nodes)
         iter_range = list(range(len(self.nodes)))
@@ -110,18 +119,21 @@ class Chromosome:
     def __dfs(self, v, used, order, assignments):
         used[v] = True
         self.nodes[v].order = order
-        if self.nodes[v].child is None:
-            return
-        # self.nodes[v].order = order
-
-        if not used[self.nodes[v].child.id]:
-            self.__dfs(self.nodes[v].child.id, used, order + 1, assignments)
-
+        
         for t in assignments[self.nodes[v].assignee.id]:
             if not used[t.id]:
                 order += 1
                 self.__dfs(t.id, used, order, assignments)
-    
+        
+        
+        #if self.nodes[v].child is None:
+        #    return
+        # self.nodes[v].order = order
+
+        # if not used[self.nodes[v].child.id]:
+        #     self.__dfs(self.nodes[v].child.id, used, order + 1, assignments)
+
+        
     def copy(self):
         nodes = []
         for node in self.nodes:
