@@ -16,7 +16,7 @@ def run_algorithm(tasks: list[Task], team_memebers: list[Assignee], start_sprint
     for i, node in enumerate(nodes):
         node.children = [nodes[j.id] for j in tasks[i].parents]
         node.parents = [nodes[j.id] for j in tasks[i].depend_on]
-    ga = GeneticAlgorithm(nodes, team_memebers, iterations=10, mutation_chance=0.85, crossover_chance=0.85)
+    ga = GeneticAlgorithm(nodes, team_memebers, iterations=5000, mutation_chance=0.85, crossover_chance=0.85)
     best_chromosome = ga.get_best_solution()
     print(best_chromosome.fitness_score)
     # answer = []
