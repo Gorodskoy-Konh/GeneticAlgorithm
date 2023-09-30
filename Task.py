@@ -3,7 +3,7 @@ from Assignee import Assignee
 from Node import Node
 
 class Task():
-    def __init__(self, deadline: datetime, duration: timedelta, assignee: Assignee, backend_id: int = None, stack: set[str]={}) -> None:
+    def __init__(self, deadline: datetime, duration: timedelta, assignee: Assignee, backend_id: int = None, stack: set[str]={}, start: datetime=None) -> None:
         self.deadline = deadline
         self.duration = duration
         self.assignee = assignee
@@ -11,6 +11,7 @@ class Task():
         self.parents = []
         self.backend_id = backend_id
         self.stack = stack
+        self.start = start
     
     def set_depend_on(self, depend_on):
         self.depend_on = depend_on

@@ -3,7 +3,7 @@ from datetime import timedelta, datetime
 from Assignee import Assignee
 from Task import Task
 from Assignee import Assignee
-from datetime import datetime, timedelta
+from datetime import timedelta
 from Node import Node
 
 def run_algorithm(tasks: list[Task], team_memebers: list[Assignee]) -> list[Task]:
@@ -21,6 +21,7 @@ def run_algorithm(tasks: list[Task], team_memebers: list[Assignee]) -> list[Task
     print(best_chromosome.fitness_score)
     print(str(best_chromosome))
     answer = []
+
     for node in best_chromosome.nodes:
         answer.append(Task(node.deadline, node.duration, node.children, node.id, node.assignee))
     return answer
