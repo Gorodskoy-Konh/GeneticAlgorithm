@@ -18,7 +18,7 @@ class Node():
         self.order = order if order is not None else int(random.random() * ORDER_LIMIT)
 
     def copy(self):
-        return Node(self.deadline, self.duration, self.id, self.assignee, self.children, self.parents)
+        return Node(self.deadline, self.duration, self.id, self.assignee, self.children, self.parents, order=self.order)
 
     def __str__(self):
         # if self.child :

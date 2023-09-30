@@ -20,6 +20,7 @@ def run_algorithm(tasks: list[Task], team_memebers: list[Assignee]) -> list[Task
     best_chromosome = ga.get_best_solution()
     print(best_chromosome.fitness_score)
     answer = []
+    print(best_chromosome.fitness())
     best_chromosome.calcate_start_times()
     for node in best_chromosome.nodes:
         answer.append(Task(node.deadline, node.duration, node.children, node.id, node.assignee, node.start))

@@ -89,7 +89,9 @@ class Chromosome:
     def calcate_start_times(self):
         nodes = []
         for node in self.nodes:
-            nodes.append(node.copy())
+            node_copy = node.copy()
+            node_copy.start = None
+            nodes.append(node_copy)
         nodes.sort(key=lambda x: x.order)
         assignments = {assignee.id:[] for assignee in self.assignees}
         assignees_time = {assignee.id:timedelta(seconds=0) for assignee in self.assignees}
