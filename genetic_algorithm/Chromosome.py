@@ -47,7 +47,7 @@ class Chromosome:
         for node in self.nodes:
             full_duration = max(full_duration, node.start + node.duration)
 
-        self.fitness_score = full_duration.total_seconds() * (1 + full_stack_difference/max(self.maximum_stack_difference, 1) + total_similarity/len(self.assignees))
+        self.fitness_score = full_duration.total_seconds() * (1 + full_stack_difference/max(self.maximum_stack_difference, 1) - total_similarity/len(self.assignees))
         return self.fitness_score
 
 
