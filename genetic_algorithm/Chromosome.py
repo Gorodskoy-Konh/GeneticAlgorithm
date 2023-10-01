@@ -47,7 +47,7 @@ class Chromosome:
         for node in self.nodes:
             full_duration = max(full_duration, node.start + node.duration)
 
-        self.fitness_score = full_duration.total_seconds() + full_stack_difference/max(self.maximum_stack_difference, 1) + total_similarity/len(self.assignees)
+        self.fitness_score = full_duration.total_seconds() * (1 + full_stack_difference/max(self.maximum_stack_difference, 1) + total_similarity/len(self.assignees))
         return self.fitness_score
 
 
@@ -74,27 +74,6 @@ class Chromosome:
                 mutated_node.nodes[i] = chromosome.nodes[i].copy()
         #mutated_node.__correct_order()
         return mutated_node
-
-    def __correct_order(self):
-        assignments = {assignee.id:[] for assignee in self.assignees}
-        for node in self.nodes:
-            assignments[node.assignee.id].append(node)
-                
-        used = [False]*len(self.nodes)
-        iter_range = list(range(len(self.nodes)))
-        random.shuffle(iter_range)
-        for i in iter_range:
-            if not used[i] and self.nodes[i].parent == None:
-                self.__dfs(self.nodes[i].id, used, i*len(self.nodes), assignments)
-        
-    def __dfs(self, v, used, order, assignments):
-        used[v] = True
-        self.nodes[v].order = order
-        
-        for t in assignments[self.nodes[v].assignee.id]:
-            if not used[t.id]:
-                order += 1
-                self.__dfs(t.id, used, order, assignments)
 
     def copy(self):
         nodes = []
