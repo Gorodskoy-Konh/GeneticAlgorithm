@@ -10,8 +10,8 @@ from genetic_algorithm.Node import Node
 if __name__ == '__main__':
     tasks = [
         Task(None, timedelta(seconds=5), 0, None),
-        Task(None, timedelta(seconds=2), 1, None),
-        Task(None, timedelta(seconds=3), 2, None),
+        Task(None, timedelta(seconds=2), 1, None, project="Разгром"),
+        Task(None, timedelta(seconds=3), 2, None, project="Разгром"),
         Task(None, timedelta(seconds=7), 3, None),
         Task(None, timedelta(seconds=1), 4, None),
         Task(None, timedelta(seconds=10), 5, None),
@@ -34,4 +34,4 @@ if __name__ == '__main__':
     tasks[12].set_depend_on([tasks[11]])
     tasks[13].set_depend_on([tasks[12]])
     tasks[14].set_depend_on([tasks[13]])
-    result = run_algorithm(tasks, [Assignee(0, None), Assignee(1, None), Assignee(2, None), Assignee(3, None)])
+    result = run_algorithm(tasks, [Assignee(0, None), Assignee(1, None), Assignee(2, None), Assignee(3, None)], datetime(2012,10,3),datetime(2012,10,4))
